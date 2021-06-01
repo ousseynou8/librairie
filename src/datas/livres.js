@@ -1,4 +1,4 @@
-import couverture from '../assets/couverture.js';
+import couverture from '../assets/couverture.jpg';
 
 const livres = [
     {
@@ -74,3 +74,5 @@ const livres = [
         image : couverture
     }
 ];
+
+export default livres;
