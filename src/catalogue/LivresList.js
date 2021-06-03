@@ -1,12 +1,12 @@
 import livres from '../datas/livres';
  import Livre from './Livre'
 
-const LivresList = () => {
+const LivresList = ({addToCart}) => {
 
 
 const livresToJsx= (items) => items.map((item) =>
 {
-return <Livre key={item.ean} livre={item} />
+return <Livre key={item.ean} livre={item} addToCart={addToCart} />
 })
 
 

@@ -12,12 +12,36 @@ const [cart, setCart] =  useState([]);
 useEffect(() => {
   const cartFrontLocalStorage = localStorage.getItem('cart');
   if(cartFrontLocalStorage){
-    const cartFrontLocalStorage = JSON.parse(cartFrontLocalStorage);
-    setCart(cartFrontLocalStorage)
+    const cartFrontLocalStorage02 = JSON.parse(cartFrontLocalStorage);
+    setCart(cartFrontLocalStorage02)
   }else{
     saveCartInLocalStorage({});
     setCart({});
   }
+
+
+  // evenement quand l'onglet devient actif
+const getSaveCart = (e) => {
+if (document.visibilityState === 'visible'){
+  const saveCart = JSON.parse(localStorage.getItem('cart'));
+  if(saveCart){
+    setCart(saveCart);
+  }
+}
+};
+document.addEventListener('visibilitychange', getSaveCart);
+
+// fin 
+
+
+// cleanup : liberer les ressources
+
+return () => {
+  // netoyer l'ecouter sur l'onglet actif
+  document.removeEventListener('visibilitychange', getSaveCart);
+
+}
+ 
 }, [setCart]);
 
 const saveCartInLocalStorage =(newCart) => {
@@ -33,7 +57,10 @@ const clearCart = (cart) => {
 const addToCart = (livre) => {
   const saveCartJson = localStorage.getItem('cart');
   const saveCart = JSON.parse(saveCartJson);
-  const qte = saveCartJson[livre.ean] ? saveCartJson[livre.ean].amount : 0;
+
+
+
+  const qte = saveCart[livre.ean] ? saveCart[livre.ean].amount : 0;
   saveCart[livre.ean] = {...livre, amount: (qte + 1)};
   saveCartInLocalStorage(saveCart);
   setCart(saveCart);
@@ -48,10 +75,10 @@ const addToCart = (livre) => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-9">
-            <LivresList />
+            <LivresList addToCart={addToCart} />
           </div>
           <div className="col-sm-3">
-          <Panier />
+          <Panier cart={cart} vider={clearCart} />
           </div>
         </div>
       </div>
